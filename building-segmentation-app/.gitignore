@@ -53,6 +53,7 @@ frontend/.env.production.local
 
 # Development files
 docs/DEVELOPMENT_PLAN.md
+NEXT_CHAT_PROMPT.md
 development.md
 *.md.bak
 
