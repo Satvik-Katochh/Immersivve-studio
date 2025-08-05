@@ -123,36 +123,40 @@ async def generate_masks_endpoint():
 
 ### **Phase 2: Frontend Development (Day 2) 🔄 NEXT**
 
-#### **Step 2.1: React Setup**
+#### **Step 2.1: React + Vite Setup**
 
 ```bash
 # What we'll do:
-npx create-react-app frontend --template typescript
+npm create vite@latest frontend -- --template react-ts
 cd frontend
+npm install
 npm install @radix-ui/react-* lucide-react tailwindcss
 ```
 
 **Why this setup?**
 
+- **Vite**: Lightning fast development
 - **TypeScript**: Type safety
-- **Radix UI**: Accessible components
-- **Lucide**: Beautiful icons
+- **shadcn/ui**: Beautiful, accessible components
 - **Tailwind**: Utility-first CSS
+- **Dark theme**: Premium, minimal design
 
 #### **Step 2.2: Component Architecture**
 
 ```typescript
 // What we'll build:
 components/
+├── ui/                  # shadcn components
 ├── ImageUpload.tsx      # Drag & drop upload
 ├── ImageCanvas.tsx      # Interactive canvas
 ├── ColorPalette.tsx     # Color selection
 ├── MaskOverlay.tsx      # Mask visualization
-└── DownloadButton.tsx   # Download functionality
+└── ProcessingStates.tsx # Loading animations
 ```
 
 **Why this structure?**
 
+- **shadcn/ui**: Premium, accessible components
 - **Reusable**: Components can be reused
 - **Testable**: Each component isolated
 - **Maintainable**: Clear separation
@@ -164,10 +168,12 @@ components/
 // What we'll implement:
 interface AppState {
   uploadedImage: File | null;
+  imagePreview: string | null;
   masks: Mask[];
   selectedMasks: number[];
   appliedColors: Map<number, string>;
   isProcessing: boolean;
+  currentStep: "upload" | "select" | "color" | "download";
 }
 ```
 
@@ -177,6 +183,74 @@ interface AppState {
 - **Type-safe**: TypeScript interfaces
 - **Reactive**: UI updates automatically
 - **Persistent**: Survives component re-renders
+- **Step tracking**: User progress through app
+
+### **Phase 2.4: Design System & Theme**
+
+#### **Theme Setup with shadcn Context Provider**
+
+```typescript
+// shadcn theme provider setup
+import { ThemeProvider } from "@/components/theme-provider";
+
+// App.tsx
+function App() {
+  return (
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <div className="min-h-screen bg-background">{/* Your app content */}</div>
+    </ThemeProvider>
+  );
+}
+
+// Theme toggle component
+import { Button } from "@/components/ui/button";
+import { Moon, Sun } from "lucide-react";
+import { useTheme } from "@/components/theme-provider";
+
+export function ThemeToggle() {
+  const { theme, setTheme } = useTheme();
+
+  return (
+    <Button
+      variant="outline"
+      size="icon"
+      onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+    >
+      <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+      <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+      <span className="sr-only">Toggle theme</span>
+    </Button>
+  );
+}
+```
+
+**Why both themes?**
+
+- **User preference**: Let users choose their preferred theme
+- **Accessibility**: Better for different lighting conditions
+- **Professional**: Standard in modern applications
+- **shadcn built-in**: Easy to implement with context provider
+
+#### **shadcn/ui Components**
+
+```typescript
+// Essential components to use:
+- Button: Primary actions
+- Card: Content containers
+- Input: File upload
+- Progress: Loading states
+- Toast: Notifications
+- Dialog: Confirmations
+- Tooltip: Help text
+- Badge: Status indicators
+```
+
+**Why shadcn/ui?**
+
+- **Accessible**: Built-in accessibility features
+- **Customizable**: Easy to theme and modify
+- **Consistent**: Unified design system
+- **Modern**: Latest React patterns
 
 ### **Phase 3: Interactive Features (Day 3) 📋 PLANNED**
 
@@ -203,7 +277,30 @@ const ImageCanvas: React.FC = () => {
 - **Flexibility**: Custom drawing
 - **Compatibility**: Works everywhere
 
-#### **Step 3.2: Real-time Preview**
+#### **Step 3.2: API Integration**
+
+```typescript
+// Backend API endpoints to integrate:
+const API_ENDPOINTS = {
+  upload: "POST /upload",
+  generateMasks: "POST /generate-masks",
+  applyColor: "POST /apply-color",
+  download: "GET /download/{filename}",
+};
+
+// Live endpoints:
+const BASE_URL =
+  "https://satvik-katochh--building-segmentation-sam2-generate-mask-cd2bf7.modal.run";
+```
+
+**Why these endpoints?**
+
+- **Complete workflow**: Upload → Process → Color → Download
+- **Real-time processing**: SAM2 GPU-powered processing
+- **Error handling**: Graceful failure recovery
+- **Progress tracking**: User feedback during processing
+
+#### **Step 3.3: Real-time Preview**
 
 ```typescript
 // What we'll implement:
@@ -546,8 +643,9 @@ vercel deploy frontend
 
 1. ✅ Backend complete
 2. ✅ Modal.com deployed
-3. 🔄 Initialize git repository
-4. 🔄 Create development plan
+3. ✅ Initialize git repository
+4. ✅ Create development plan
+5. 🔄 Frontend development (React + shadcn/ui)
 
 ### **Short-term (This week):**
 
