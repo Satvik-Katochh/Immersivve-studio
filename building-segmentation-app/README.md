@@ -359,3 +359,26 @@ This project is for educational purposes. SAM2 is licensed by Meta.
 ---
 
 **Built with ❤️ using SAM2, FastAPI, and Modal.com**
+
+## 🚨 **Today's Issues & Tomorrow's Plan**
+
+### **Issues Identified Today:**
+
+1. **SAM2 Coordinate Rendering**: Coordinates from SAM2 model not matching frontend canvas display
+2. **Image Display**: Uploaded images not showing properly on canvas
+3. **Coordinate System Mismatch**: Backend and frontend using different coordinate systems
+
+### **Tomorrow's Focus:**
+
+1. **Fix SAM2 coordinate transformation** in `sam2_service.py`
+2. **Fix canvas image scaling** in frontend components
+3. **Add coordinate debugging** to track the issue
+4. **Test with real images** to verify fixes
+
+### **Files to Update:**
+
+- `backend/services/sam2_service.py` - Add coordinate transformation
+- `frontend/src/components/ImageUpload.tsx` - Fix canvas display
+- `backend/modal_app.py` - Add debug logging
+
+**See `docs/DEVELOPMENT_PLAN.md` for detailed technical solutions! 📚**
